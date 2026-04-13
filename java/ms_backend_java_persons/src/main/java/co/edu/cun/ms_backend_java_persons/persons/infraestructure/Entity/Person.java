@@ -1,10 +1,15 @@
 package co.edu.cun.ms_backend_java_persons.persons.infraestructure.Entity;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import lombok.Data;
 
@@ -12,6 +17,7 @@ import lombok.Data;
 @Table(name = "persons")
 @Data
 public class Person {
+    private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,4 +43,20 @@ public class Person {
 
     @Column(name = "created_at", nullable = false)
     private String createdAt;
+
+    @PrePersist
+    void onCreate() {
+        final String now = LocalDateTime.now().format(DATE_TIME_FORMATTER);
+        if (createdAt == null || createdAt.isBlank()) {
+            createdAt = now;
+        }
+        if (updatedAt == null || updatedAt.isBlank()) {
+            updatedAt = now;
+        }
+    }
+
+    @PreUpdate
+    void onUpdate() {
+        updatedAt = LocalDateTime.now().format(DATE_TIME_FORMATTER);
+    }
 }

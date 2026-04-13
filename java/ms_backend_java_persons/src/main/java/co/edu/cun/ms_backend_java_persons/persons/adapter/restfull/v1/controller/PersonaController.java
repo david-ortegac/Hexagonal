@@ -28,7 +28,7 @@ public class PersonaController {
         this.mapperAdapter = mapperAdapter;
     }
 
-    @GetMapping("/")
+    @GetMapping({"", "/"})
     public ResponseEntity<List<PersonAdapter>> getPersons() {
         return ResponseEntity.ok().body(mapperAdapter.toAdapterList(personService.getAllPersons()));
     }
@@ -38,7 +38,7 @@ public class PersonaController {
         return ResponseEntity.ok().body(mapperAdapter.toAdapter(personService.getPersonById(id)));
     }
 
-    @PostMapping("/")
+    @PostMapping({"", "/"})
     public ResponseEntity<PersonAdapter> createPerson(@RequestBody PersonAdapter personAdapter) {
         return ResponseEntity.ok().body(mapperAdapter.toAdapter(personService.createPerson(mapperAdapter.toDomain(personAdapter))));
     }

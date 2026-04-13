@@ -20,6 +20,7 @@ repositories {
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-webmvc'
+	implementation 'com.amazonaws.serverless:aws-serverless-java-container-springboot4:3.0.1'
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	runtimeOnly 'com.mysql:mysql-connector-j'
@@ -35,4 +36,23 @@ dependencies {
 
 tasks.named('test') {
 	useJUnitPlatform()
+}
+
+tasks.named('jar') {
+	enabled = true
+}
+
+tasks.named('bootJar') {
+	enabled = false
+}
+
+tasks.register('buildLambdaZip', Zip) {
+	dependsOn tasks.named('classes')
+	archiveFileName = 'ms-backend-java-persons-lambda.zip'
+	destinationDirectory = layout.buildDirectory.dir('distributions')
+
+	from(sourceSets.main.output)
+	into('lib') {
+		from(configurations.runtimeClasspath)
+	}
 }

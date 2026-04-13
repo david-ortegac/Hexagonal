@@ -48,8 +48,6 @@ public class PersonImpl implements IPerson {
         personDomain.setPhone(person.getPhone());
         personDomain.setAddress(person.getAddress());
         personDomain.setCity(person.getCity());
-        personDomain.setUpdatedAt(person.getUpdatedAt());
-        personDomain.setCreatedAt(person.getCreatedAt());
         Person personEntity = mapper.toEntity(personDomain);
         personEntity.setId(id);
         return mapper.toDomain(repository.save(personEntity));
