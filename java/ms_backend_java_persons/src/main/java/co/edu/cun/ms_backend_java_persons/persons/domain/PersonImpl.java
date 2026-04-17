@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import co.edu.cun.ms_backend_java_persons.persons.application.IPerson;
 import co.edu.cun.ms_backend_java_persons.persons.domain.DTO.PersonDomain;
+import co.edu.cun.ms_backend_java_persons.persons.domain.exception.PersonNotFoundException;
 import co.edu.cun.ms_backend_java_persons.persons.infraestructure.Entity.Person;
 import co.edu.cun.ms_backend_java_persons.persons.infraestructure.Mapper.IPersonMapper;
 import co.edu.cun.ms_backend_java_persons.persons.infraestructure.Respository.IPersonRepository;
@@ -30,7 +31,7 @@ public class PersonImpl implements IPerson {
 
     @Override
     public PersonDomain getPersonById(int id) {
-        return mapper.toDomain(repository.findById(id).orElseThrow(() -> new RuntimeException("Person not found")));
+        return mapper.toDomain(findPersonByIdOrThrow(id));
     }
 
     @Override
@@ -56,9 +57,13 @@ public class PersonImpl implements IPerson {
     @Override
     @Transactional
     public String deletePerson(int id) {
-        Person person = repository.findById(id).orElseThrow(() -> new RuntimeException("Person not found"));
+        Person person = findPersonByIdOrThrow(id);
         repository.delete(person);
         return "Person deleted successfully";
     }
-    
+
+    private Person findPersonByIdOrThrow(int id) {
+        return repository.findById(id).orElseThrow(() -> new PersonNotFoundException(id));
+    }
+
 }
