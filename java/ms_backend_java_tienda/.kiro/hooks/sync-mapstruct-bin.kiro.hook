@@ -1,0 +1,19 @@
+{
+  "enabled": true,
+  "name": "Sync MapStruct classes to bin/main",
+  "description": "After saving a Java file, runs Gradle compileJava and copies the generated MapStruct implementations to bin/main so VS Code's runner always has the correct classes",
+  "version": "1",
+  "when": {
+    "type": "fileEdited",
+    "patterns": [
+      "**/*.java"
+    ]
+  },
+  "then": {
+    "type": "runCommand",
+    "command": "./gradlew compileJava  && cp -r build/classes/java/main/co/edu/cun/tienda/tienda/. bin/main/co/edu/cun/tienda/tienda/",
+    "timeout": 60
+  },
+  "workspaceFolderName": "tienda",
+  "shortName": "sync-mapstruct-bin"
+}
