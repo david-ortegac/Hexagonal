@@ -57,3 +57,17 @@ tasks.register('buildLambdaZip', Zip) {
 		from(configurations.runtimeClasspath)
 	}
 }
+
+tasks.register('lambdaHandler') {
+	group = 'aws'
+	description = 'Prints the AWS Lambda handler class to use in the function configuration'
+	doLast {
+		println ""
+		println "==========================================="
+		println " AWS Lambda Handler"
+		println "==========================================="
+		println " ${project.group}.lambda.StreamLambdaHandler::handleRequest"
+		println "==========================================="
+		println ""
+	}
+}
